@@ -11,6 +11,7 @@ void setup() {
 	// Classes
 	gui.begin();
 	gyro.begin();
+	accel.begin();
 	drive.begin(9, 10, 11, 12);
 
 	// Heartbeat
@@ -29,6 +30,7 @@ void loop() {
 
 	// System Calls
 	gyro.update();
+	accel.update();
 	gui.update();
 
 	// Run Current Task

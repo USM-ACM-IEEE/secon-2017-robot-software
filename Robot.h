@@ -10,6 +10,7 @@
 #include "RobotDrive.h"
 #include "Gui.h"
 #include "Gyro.h"
+#include "Accelerometer.h"
 #include "Task.h"
 
 #include "Tasks.h"
