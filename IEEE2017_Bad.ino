@@ -1,10 +1,5 @@
 #include "Robot.h"
 
-Task* tasks[] = {
-	new FirstTask,
-	new LastTask
-};
-
 void setup() {
 	// Wire
 	Wire.begin();
@@ -22,7 +17,6 @@ void setup() {
 	pinMode(23, OUTPUT);
 
 	// Run all task setups
-	currentTask = 0;
 	do tasks[currentTask++]->setup();
 		while(currentTask != 0);
 }

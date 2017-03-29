@@ -1,5 +1,20 @@
 #include "Robot.h"
 
+int currentTask = 0;
+
+Task* tasks[] = {
+	// Startup
+	new FirstTask,
+
+	// Stage 1
+	new Forward1,
+	new Sweep1,
+	new Sweep2,
+
+	// Cleanup
+	new LastTask
+};
+
 void FirstTask::setup() {
 	// LED's and Buttons
 	pinMode(25, OUTPUT);
@@ -35,4 +50,5 @@ void LastTask::setup() {
 
 void LastTask::loop() {
 	Serial.println("No more tasks!");
+	currentTask = 0;
 }
