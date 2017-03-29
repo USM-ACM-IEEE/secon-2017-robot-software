@@ -12,10 +12,10 @@ void RobotDrive::begin(int kFrontLeft, int kFrontRight, int kRearLeft, int kRear
 
 void RobotDrive::MecanumDrive_Cartesian(float x, float y, float rotation) {
 	// Generate Vectors
-	float fl = x + y + rotation;
-	float fr = -x + y - rotation;
-	float rl = -x + y + rotation;
-	float rr = x + y - rotation;
+	float fl = x - y - rotation;
+	float fr = -x - y + rotation;
+	float rl = -x - y - rotation;
+	float rr = x - y + rotation;
 
 	// Calculate uS
 	int fl_uS = 1500+(fl*500);
