@@ -3,9 +3,8 @@
 Gyro gyro;
 
 void Gyro::begin() {
-	while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G)) {
+	if(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G)) {
 		Serial.println(F("Could not find a valid MPU6050 sensor, check wiring!"));
-		delay(500);
 	}
 
 	mpu.calibrateGyro();
