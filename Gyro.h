@@ -7,6 +7,7 @@
 class Gyro {
 	MPU6050 mpu;
 
+	bool initialized = false;
 	float yaw, pitch, roll;
 	unsigned long int lastUpdate, maxTime;
 

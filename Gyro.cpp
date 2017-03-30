@@ -3,12 +3,13 @@
 Gyro gyro;
 
 void Gyro::begin() {
-	if(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G)) {
-		Serial.println(F("Could not find a valid MPU6050 sensor, check wiring!"));
-	}
+	initialized = mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G);
 
-	mpu.calibrateGyro();
-	mpu.setThreshold(3);
+	if(initialized) {
+		Serial.println(F("Could not find a valid MPU6050 sensor, check wiring!"));
+		mpu.calibrateGyro();
+		mpu.setThreshold(3);
+	}
 }
 
 void Gyro::update() {
@@ -22,11 +23,13 @@ void Gyro::update() {
 	if(timeStep > maxTime)
 		maxTime = timeStep;
 
-	Vector norm = mpu.readNormalizeGyro();
+	if(initialized) {
+		Vector norm = mpu.readNormalizeGyro();
 
-	//pitch = pitch + norm.YAxis * timeStep;
-	//roll = roll + norm.XAxis * timeStep;
-	yaw = yaw + norm.ZAxis * timeStep/1000;
+		//pitch = pitch + norm.YAxis * timeStep;
+		//roll = roll + norm.XAxis * timeStep;
+		yaw = yaw + norm.ZAxis * timeStep/1000;
+	}
 
 	lastUpdate = millis();
 }
