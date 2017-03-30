@@ -24,6 +24,9 @@ void setup() {
 
 
 unsigned long frameStartTime;
+
+int16_t max_x, max_y, max_z;
+
 void loop() {
 	// Start Heartbeat
 	frameStartTime = millis();
@@ -35,6 +38,24 @@ void loop() {
 
 	// Run Current Task
 	tasks[currentTask]->loop();
+
+	//gui.showNumber(gyro.getYaw());
+
+	if(accel.getX() > max_x || accel.getY() > max_y || accel.getZ() > max_z) {
+		Serial.print(accel.getX());
+		Serial.print("\t");
+		Serial.print(accel.getY());
+		Serial.print("\t");
+		Serial.print(accel.getZ());
+		Serial.println();
+	}
+
+	if(accel.getX() > max_x)
+		max_x = accel.getX();
+	if(accel.getY() > max_y)
+		max_y = accel.getY();
+	if(accel.getZ() > max_z)
+		max_z = accel.getZ();
 
 	// Finish Heartbeat
 	digitalWrite(23, !digitalRead(23));

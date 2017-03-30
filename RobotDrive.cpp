@@ -30,31 +30,97 @@ void RobotDrive::MecanumDrive_Cartesian(float x, float y, float rotation) {
 	rearRight.writeMicroseconds(rr_uS);
 }
 
-//void turn(int target, float speed) {
-//
-//	float offset, angle, ranged, adjusted, modded, mapped, output;
-//
-//	offset = ypr[0] * -180/M_PI;
-//
-//	do {
-//		angle = ypr[0] * 180/M_PI;
-//		ranged = map(angle, -180, 180, 0, 360);
-//		adjusted = ranged - offset;
-//		modded = int(adjusted) % 360;
-//		mapped = map(modded, 0, 360, -180, 180);
-//
-//		lcd.setCursor(0,0);
-//
-//		output = min(speed*abs(target-mapped), 0.2);
-//
-//		if(target-mapped > 0) {
-//			//lcd.print(output);
-//			drive.MecanumDrive_Cartesian(0, 0, output);
-//		} else if(target-mapped < 0) {
-//			//lcd.print(-output);
-//			drive.MecanumDrive_Cartesian(0, 0, -output);
-//		}
-//	} while(abs(target-mapped) > 0);
-//
-//	drive.MecanumDrive_Cartesian(0, 0, 0);
-//}
+/*****************************************************************************/
+
+TimedDrive_Cartesian::TimedDrive_Cartesian(float x, float y, float z, uint16_t time) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+	this->time = time;
+}
+
+void TimedDrive_Cartesian::setup() {
+}
+
+void TimedDrive_Cartesian::loop() {
+	if(startTime == 0) {
+		startTime = millis();
+	}
+
+	if(millis()-startTime <= time) {
+		drive.MecanumDrive_Cartesian(x, y, z);
+	} else {
+		startTime = 0;
+		drive.MecanumDrive_Cartesian(0, 0, 0);
+		currentTask++;
+	}
+}
+
+/*****************************************************************************/
+
+TimedDrive_Heading::TimedDrive_Heading(float x, float y, int16_t heading, uint16_t time) {
+	this->x = x;
+	this->y = y;
+	this->time = time;
+	this->heading = heading;
+}
+
+void TimedDrive_Heading::setup() {
+}
+
+void TimedDrive_Heading::loop() {
+	if(startTime == 0) {
+		startTime = millis();
+	}
+
+	if(millis()-startTime <= time) {
+		int16_t offset = heading - gyro.getYaw();
+
+		float value = 0.1 * offset / abs(offset);
+
+		if(abs(offset) <= 1) {
+			value = 0;
+		}
+
+		drive.MecanumDrive_Cartesian(x, y, value);
+	} else {
+		startTime = 0;
+		drive.MecanumDrive_Cartesian(0, 0, 0);
+		currentTask++;
+	}
+}
+
+/*****************************************************************************/
+
+TurnAbsolute::TurnAbsolute(int16_t heading, uint16_t time) {
+	this->time = time;
+	this->heading = heading;
+}
+
+void TurnAbsolute::setup() {
+}
+
+void TurnAbsolute::loop() {
+	if(startTime == 0) {
+		startTime = millis();
+	}
+
+	if(millis()-startTime <= time) {
+		int16_t offset = heading - gyro.getYaw();
+
+		// TODO: Crashes if value is 0.4 or lower...
+		float value = 0.5 * offset / abs(offset);
+
+		if(abs(offset) <= 1) {
+			startTime = 0;
+			drive.MecanumDrive_Cartesian(0, 0, 0);
+			currentTask++;
+		}
+
+		drive.MecanumDrive_Cartesian(0, 0, value);
+	} else {
+		startTime = 0;
+		drive.MecanumDrive_Cartesian(0, 0, 0);
+		currentTask++;
+	}
+}

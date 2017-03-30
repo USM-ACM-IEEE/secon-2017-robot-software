@@ -15,6 +15,7 @@ class Gui {
 		void begin();
 		void update();
 		void test(int col, int row, char val);
+		void showNumber(float input);
 };
 
 extern Gui gui;

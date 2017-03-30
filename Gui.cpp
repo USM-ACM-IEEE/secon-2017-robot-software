@@ -28,3 +28,9 @@ void Gui::update() {
 		}
 	}
 }
+
+void Gui::showNumber(float input) {
+	char derp = display[0][17];
+	dtostrf(input, 17, 1, display[0]);
+	display[0][17] = derp;
+}
