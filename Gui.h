@@ -8,8 +8,8 @@
 class Gui {
 	Adafruit_RGBLCDShield lcd;
 
-	char current[2][17] = {"                ", "                "};
-	char display[2][17] = {"                ", "                "};
+	char current[2][17] = {"End My Suffering", "Existing Is Pain"};
+	char display[2][17] = {"End My Suffering", "Existing Is Pain"};
 
 	public:
 		void begin();
